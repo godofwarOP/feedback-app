@@ -1,6 +1,6 @@
 # Feedback App
 
-[Live Demo](https://epic-archimedes-6d1fca.netlify.app/)
+This is a React app to leave feedback for a product or service (with localstorage support)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
