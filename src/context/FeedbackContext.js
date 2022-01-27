@@ -1,28 +1,10 @@
 import { createContext, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import useLocalStorage from "../components/hooks/useLocalStorage";
 
 const FeedbackContext = createContext();
-
 export const FeedbackProvider = ({ children }) => {
-  const [feedback, setFeedback] = useState([
-    {
-      id: 1,
-      text: "This item 1 is from context",
-      rating: 10,
-    },
-
-    {
-      id: 2,
-      text: "This item 2 is from context",
-      rating: 7,
-    },
-
-    {
-      id: 3,
-      text: "This item 3 is from context",
-      rating: 4,
-    },
-  ]);
+  const [feedbacks, setFeedbacks] = useLocalStorage("feedbacks", []);
 
   const [feedbackEdit, setFeedbackEdit] = useState({
     item: {},
@@ -38,18 +20,18 @@ export const FeedbackProvider = ({ children }) => {
 
   const deleteFeedback = (id) => {
     if (window.confirm("Are you sure you want to delete?")) {
-      setFeedback(feedback.filter((item) => item.id !== id));
+      setFeedbacks(feedbacks.filter((item) => item.id !== id));
     }
   };
 
   const addFeedback = (newFeedback) => {
     newFeedback.id = uuidv4();
-    setFeedback([newFeedback, ...feedback]);
+    setFeedbacks([newFeedback, ...feedbacks]);
   };
 
   const updateFeedback = (id, updatedItem) => {
-    setFeedback(
-      feedback.map((item) => {
+    setFeedbacks(
+      feedbacks.map((item) => {
         if (item.id === id) {
           return {
             ...item,
@@ -65,7 +47,7 @@ export const FeedbackProvider = ({ children }) => {
   return (
     <FeedbackContext.Provider
       value={{
-        feedback,
+        feedbacks,
         deleteFeedback,
         addFeedback,
         editFeedback,
