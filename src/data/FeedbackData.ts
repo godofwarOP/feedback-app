@@ -1,4 +1,6 @@
-const FeedbackData = [
+import { FeedbackType } from "../types/feedback";
+
+const FeedbackData: FeedbackType[] = [
   {
     id: 1,
     rating: 10,
