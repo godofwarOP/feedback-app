@@ -38,7 +38,7 @@ const FeedbackForm: React.FC = () => {
       addFeedback({
         rating: rating,
         text: text,
-        id: 1,
+        id: "1",
       });
     }
 

@@ -10,16 +10,16 @@ interface FeedbackContextInterface {
     edit: boolean;
   };
   addFeedback: (item: FeedbackType) => void;
-  deleteFeedbackById: (id: number) => void;
+  deleteFeedbackById: (id: string) => void;
   editFeedback: (item: FeedbackType) => void;
-  updateFeedbackById: (id: number, item: FeedbackType) => void;
+  updateFeedbackById: (id: string, item: FeedbackType) => void;
 }
 
 const defaultValues: FeedbackContextInterface = {
   isLoading: true,
   feedbacks: [],
   feedbackEdit: {
-    item: { id: 0, rating: 1, text: "" },
+    item: { id: "0", rating: 1, text: "" },
     edit: false,
   },
   addFeedback: () => {},
@@ -86,7 +86,7 @@ export const FeedbackProvider: React.FC<{ children: React.ReactNode }> = ({
     return true;
   };
 
-  const updateFeedbackById = async (id: number, item: FeedbackType) => {
+  const updateFeedbackById = async (id: string, item: FeedbackType) => {
     try {
       const updatedFeedback = await FeedbackModel.updateFeedbackById(id, item);
 
@@ -111,7 +111,7 @@ export const FeedbackProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const deleteFeedbackById = async (id: number) => {
+  const deleteFeedbackById = async (id: string) => {
     try {
       FeedbackModel.deleteFeedbackById(id).then(() => {
         setFeedbacks((prev) => prev.filter((e) => e.id !== id));

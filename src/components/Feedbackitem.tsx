@@ -17,7 +17,7 @@ const FeedbackItem: React.FC<{ item: FeedbackType }> = (props) => {
             "do you want to delete this feedback?"
           );
           if (areYouSure) {
-            deleteFeedbackById(+props.item.id);
+            deleteFeedbackById(props.item.id);
           }
         }}
       >
