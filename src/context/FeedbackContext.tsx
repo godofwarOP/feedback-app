@@ -1,6 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
 import { FeedbackType } from "../types/feedback";
-import FeedbackModel from "../models/feedback";
 
 interface FeedbackContextInterface {
   isLoading: boolean;
@@ -50,18 +49,9 @@ export const FeedbackProvider: React.FC<{ children: React.ReactNode }> = ({
   const addFeedback = async (item: FeedbackType) => {
     try {
       setLoading(true);
-      const { id, rating, text } = await FeedbackModel.addFeedback(
-        item.text,
-        item.rating
-      );
-      setFeedbacks((prev) => [
-        ...prev,
-        {
-          id,
-          text,
-          rating,
-        },
-      ]);
+      /**
+       * @todo
+       */
     } catch (error) {
       throw error;
     } finally {
@@ -72,8 +62,10 @@ export const FeedbackProvider: React.FC<{ children: React.ReactNode }> = ({
   const getAllFeedbacks = async () => {
     try {
       setLoading(true);
-      const feedbacksArray = await FeedbackModel.getAllFeedbacks();
-      setFeedbacks(feedbacksArray);
+      /**
+       * @todo
+       */
+      // setFeedbacks();
     } catch (error) {
       console.log(error);
     } finally {
@@ -88,23 +80,25 @@ export const FeedbackProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const updateFeedbackById = async (id: string, item: FeedbackType) => {
     try {
-      const updatedFeedback = await FeedbackModel.updateFeedbackById(id, item);
+      /**
+       * @todo
+       */
 
-      setFeedbacks((prev) => {
-        const feedbackInMemory = prev.findIndex(
-          (e) => e.id === updatedFeedback.id
-        );
-        if (feedbackInMemory < 0) {
-          return [...prev];
-        }
-        prev[feedbackInMemory] = {
-          id: updatedFeedback.id,
-          text: updatedFeedback.text,
-          rating: updatedFeedback.rating,
-        };
+      // setFeedbacks((prev) => {
+      //   const feedbackInMemory = prev.findIndex(
+      //     (e) => e.id === updatedFeedback.id
+      //   );
+      //   if (feedbackInMemory < 0) {
+      //     return [...prev];
+      //   }
+      //   prev[feedbackInMemory] = {
+      //     id: updatedFeedback.id,
+      //     text: updatedFeedback.text,
+      //     rating: updatedFeedback.rating,
+      //   };
 
-        return [...prev];
-      });
+      //   return [...prev];
+      // });
       setFeedbackEdit({ item: defaultValues.feedbackEdit.item, edit: false });
     } catch (error) {
       console.log(error);
@@ -113,9 +107,9 @@ export const FeedbackProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const deleteFeedbackById = async (id: string) => {
     try {
-      FeedbackModel.deleteFeedbackById(id).then(() => {
-        setFeedbacks((prev) => prev.filter((e) => e.id !== id));
-      });
+      /**
+       * @todo
+       */
     } catch (error) {
       console.log(error);
     }
