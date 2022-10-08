@@ -34,7 +34,7 @@ export class FeedbackModel implements FeedbackInterface {
   }
 
   public async updateFeedbackById(
-    id: number,
+    id: string,
     feedback: FeedbackType
   ): Promise<FeedbackType> {
     try {
@@ -52,7 +52,7 @@ export class FeedbackModel implements FeedbackInterface {
     }
   }
 
-  public async deleteFeedbackById(id: number): Promise<FeedbackType> {
+  public async deleteFeedbackById(id: string): Promise<FeedbackType> {
     try {
       const response = await fetch(`/feedback/${id}`, {
         method: "DELETE",
