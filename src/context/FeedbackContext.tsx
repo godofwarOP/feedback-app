@@ -1,5 +1,7 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
+import useLocalStorage from "../hooks/useLocalStorage";
 import { FeedbackType } from "../types/feedback";
+import { v4 as uuidv4 } from "uuid";
 
 interface FeedbackContextInterface {
   isLoading: boolean;
@@ -33,7 +35,6 @@ export const FeedbackProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [isLoading, setLoading] = useState<boolean>(true);
-  const [feedbacks, setFeedbacks] = useState<FeedbackType[]>([]);
   const [feedbackEdit, setFeedbackEdit] = useState<{
     item: FeedbackType;
     edit: boolean;
@@ -41,33 +42,37 @@ export const FeedbackProvider: React.FC<{ children: React.ReactNode }> = ({
     item: defaultValues.feedbackEdit.item,
     edit: false,
   });
+  const [values, setValues] = useLocalStorage<FeedbackType[]>("feedbacks", []);
+  const [feedbacks, setFeedbacks] = useState<FeedbackType[]>([]);
+
+  const getAllFeedbacks = useCallback(() => {
+    try {
+      setLoading(true);
+      setFeedbacks(values);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }, [values]);
 
   useEffect(() => {
     getAllFeedbacks();
-  }, []);
+  }, [getAllFeedbacks]);
 
   const addFeedback = async (item: FeedbackType) => {
     try {
       setLoading(true);
-      /**
-       * @todo
-       */
+      setValues([
+        ...values,
+        {
+          id: uuidv4(),
+          text: item.text,
+          rating: item.rating,
+        },
+      ]);
     } catch (error) {
       throw error;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getAllFeedbacks = async () => {
-    try {
-      setLoading(true);
-      /**
-       * @todo
-       */
-      // setFeedbacks();
-    } catch (error) {
-      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -80,25 +85,20 @@ export const FeedbackProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const updateFeedbackById = async (id: string, item: FeedbackType) => {
     try {
-      /**
-       * @todo
-       */
+      setFeedbacks((prev) => {
+        const index = prev.findIndex((e) => e.id === item.id);
+        if (index < 0) {
+          return [...prev];
+        }
+        prev[index] = {
+          id: item.id,
+          text: item.text,
+          rating: item.rating,
+        };
+        setValues(prev);
 
-      // setFeedbacks((prev) => {
-      //   const feedbackInMemory = prev.findIndex(
-      //     (e) => e.id === updatedFeedback.id
-      //   );
-      //   if (feedbackInMemory < 0) {
-      //     return [...prev];
-      //   }
-      //   prev[feedbackInMemory] = {
-      //     id: updatedFeedback.id,
-      //     text: updatedFeedback.text,
-      //     rating: updatedFeedback.rating,
-      //   };
-
-      //   return [...prev];
-      // });
+        return [...prev];
+      });
       setFeedbackEdit({ item: defaultValues.feedbackEdit.item, edit: false });
     } catch (error) {
       console.log(error);
@@ -107,9 +107,18 @@ export const FeedbackProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const deleteFeedbackById = async (id: string) => {
     try {
-      /**
-       * @todo
-       */
+      setFeedbacks((prev) => {
+        const index = feedbacks.findIndex((e) => e.id === id);
+
+        if (index < 0) {
+          return [...prev];
+        }
+
+        prev.splice(index, 1);
+
+        setValues(prev);
+        return [...prev];
+      });
     } catch (error) {
       console.log(error);
     }
